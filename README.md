@@ -1,1 +1,10 @@
 # WykopWTF
+
+
+
+
+
+
+
+
+### Łukasz Krawczyszyn
