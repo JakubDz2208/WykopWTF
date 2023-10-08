@@ -3,8 +3,3 @@
 
 
 
-
-
-
-
-### Łukasz Krawczyszyn
