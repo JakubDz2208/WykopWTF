@@ -17,3 +17,11 @@ Instalacja wymaganych bibliotek
 ```
 pip install -r requirements.txt
 ```
+
+## Autorzy
+
+Michał 46873
+Jakub 48022
+Jakub 46023
+Łukasz 46968
+Patryk 45042
