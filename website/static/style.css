@@ -2,13 +2,18 @@
 
 body {
     font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
 h1 {
     color: #333;
+    text-align: center;
+    margin-top: 20px;
 }
 
 form {
+    text-align: center;
     margin-bottom: 20px;
 }
 
@@ -18,14 +23,17 @@ label {
 
 input {
     margin-bottom: 10px;
+    padding: 8px;
 }
 
 button {
-    padding: 5px 10px;
+    padding: 8px 16px;
     background-color: #007bff;
     color: #fff;
     border: none;
     cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
@@ -36,20 +44,21 @@ button:hover {
     margin-top: 20px;
     border: 1px solid #ccc;
     overflow: auto;
+    padding: 20px;
 }
 
-
 table {
-    width: auto; /* Set width to auto for dynamic width based on content */
+    width: 100%;
     border-collapse: collapse;
     margin-top: 10px;
-    table-layout: auto; /* Set table layout to auto for dynamic width based on content */
+    table-layout: fixed;
 }
 
 th, td {
     border: 1px solid #ddd;
-    padding: 12px; /* Increase padding for better spacing */
+    padding: 12px;
     text-align: left;
+    word-wrap: break-word;
 }
 
 th {
@@ -62,9 +71,10 @@ tbody tr:nth-child(even) {
 
 td {
     border: 1px solid #ddd;
-    padding: 12px; /* Increase padding for better spacing */
+    padding: 12px;
     text-align: left;
-    margin-right: 10px; /* Increase right margin for more space */
+    margin-right: 10px;
+    word-wrap: break-word;
 }
 
 tbody tr:nth-child(even) {

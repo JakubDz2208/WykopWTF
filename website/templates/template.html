@@ -4,54 +4,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GPT Model Web App</title>
+    <title>WykopWTF</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
-    <h1>GPT Model Web App</h1>
+<body class="bg-light">
+    <div class="container mt-4">
+        <h1 class="mb-4">Wyszukiwarka treści nieodpowiednich Wykop.pl</h1>
+        
+        <form id="scrapeForm" class="mb-4">
+            <div class="form-group">
+                <label for="url">Wpisz nazwe wątku:</label>
+                <input type="text" id="url" name="url" class="form-control" value="polityka">
+            </div>
+            <div class="form-group">
+                <label for="limit">Limit rekordów:</label>
+                <input type="number" id="limit" name="limit" class="form-control" value="5">
+            </div>
+            <button type="button" class="btn btn-primary" onclick="scrapeComments()">Lista wpisów</button>
+        </form>
+
+        <!-- Pagination buttons with arrows -->
+        <button id="prevPage" onclick="changePage(-1)" class="btn btn-secondary mr-2" disabled>&#x2190; Następna</button>
+        <button id="nextPage" onclick="changePage(1)" class="btn btn-secondary" disabled>Poprzednia &#x2192;</button>
+        
+        <h2 class="mt-4">Wpisy (Strona <span id="currentPage">1</span>):</h2>
+
+        <div id="scrapedComments"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     
-    <form id="scrapeForm">
-        <label for="url">Enter URL:</label>
-        <input type="text" id="url" name="url" value="polityka">
-        <br>
-        <label for="limit">Limit:</label>
-        <input type="number" id="limit" name="limit" value="5">
-        <br>
-        <button type="button" onclick="scrapeComments()">Scrape Comments</button>
-    </form>
-
-    <h2>Scraped Comments:</h2>
-    <div id="scrapedComments"></div>
-
     <script>
+        let currentPage = 1;
+        let allComments = [];
+
         async function scrapeComments() {
             const url = document.getElementById('url').value;
             const limit = document.getElementById('limit').value;
             const scrapedCommentsContainer = document.getElementById('scrapedComments');
+            const prevPageButton = document.getElementById('prevPage');
+            const nextPageButton = document.getElementById('nextPage');
+            const currentPageSpan = document.getElementById('currentPage');
 
             try {
-                const response = await fetch('/api/scrape_comments', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        url: url,
-                        limit: limit,
-                    }),
-                });
+                if (allComments.length === 0) {
+                    const response = await fetch('/api/scrape_comments', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            url: url,
+                            limit: limit,
+                        }),
+                    });
 
-                const responseData = await response.json();
+                    const responseData = await response.json();
 
-                if (responseData.error) {
-                    scrapedCommentsContainer.innerText = `Error: ${responseData.error}`;
-                } else {
-                    const comments = responseData.comments.map((comment, index) => `<tr><td>${index + 1}</td><td>${comment.Comment}</td><td>${comment.Generated_Prompts}</td></tr>`).join('');
-                    scrapedCommentsContainer.innerHTML = `<table><thead><tr><th>Number</th><th>Comment</th><th>Generated Prompts</th></tr></thead><tbody>${comments}</tbody></table>`;
+                    if (responseData.error) {
+                        scrapedCommentsContainer.innerText = `Error: ${responseData.error}`;
+                        return;
+                    }
+
+                    allComments = responseData.comments;
                 }
+
+                const comments = allComments.slice((currentPage - 1) * 20, currentPage * 20).map((comment, index) => {
+                    const predictionText = comment.Predictions ? 'Tak' : 'Nie';
+                    return `<tr><td>${(currentPage - 1) * 20 + index + 1}</td><td>${comment.Comment}</td><td>${predictionText}</td></tr>`;
+                }).join('');
+                scrapedCommentsContainer.innerHTML = `<table class="table table-bordered"><thead><tr><th>Number wpisu</th><th>Wpis</th><th>Czy negatywny?</th></tr></thead><tbody>${comments}</tbody></table>`;
+                currentPageSpan.textContent = currentPage;
+                prevPageButton.disabled = currentPage === 1;
+                nextPageButton.disabled = allComments.length <= currentPage * 20;
             } catch (error) {
                 scrapedCommentsContainer.innerText = `An error occurred: ${error.message}`;
             }
+        }
+
+        function changePage(change) {
+            currentPage += change;
+            scrapeComments();
         }
     </script>
 </body>
