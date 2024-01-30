@@ -1,4 +1,7 @@
-openai
 pandas
 numpy
 flask
+scikit-learn
+datasets
+joblib
+bs4
