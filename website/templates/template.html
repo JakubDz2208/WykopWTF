@@ -1,0 +1,58 @@
+<!-- website/templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPT Model Web App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>GPT Model Web App</h1>
+    
+    <form id="scrapeForm">
+        <label for="url">Enter URL:</label>
+        <input type="text" id="url" name="url" value="polityka">
+        <br>
+        <label for="limit">Limit:</label>
+        <input type="number" id="limit" name="limit" value="5">
+        <br>
+        <button type="button" onclick="scrapeComments()">Scrape Comments</button>
+    </form>
+
+    <h2>Scraped Comments:</h2>
+    <div id="scrapedComments"></div>
+
+    <script>
+        async function scrapeComments() {
+            const url = document.getElementById('url').value;
+            const limit = document.getElementById('limit').value;
+            const scrapedCommentsContainer = document.getElementById('scrapedComments');
+
+            try {
+                const response = await fetch('/api/scrape_comments', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        url: url,
+                        limit: limit,
+                    }),
+                });
+
+                const responseData = await response.json();
+
+                if (responseData.error) {
+                    scrapedCommentsContainer.innerText = `Error: ${responseData.error}`;
+                } else {
+                    const comments = responseData.comments.map((comment, index) => `<tr><td>${index + 1}</td><td>${comment.Comment}</td><td>${comment.Generated_Prompts}</td></tr>`).join('');
+                    scrapedCommentsContainer.innerHTML = `<table><thead><tr><th>Number</th><th>Comment</th><th>Generated Prompts</th></tr></thead><tbody>${comments}</tbody></table>`;
+                }
+            } catch (error) {
+                scrapedCommentsContainer.innerText = `An error occurred: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

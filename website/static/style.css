@@ -1,0 +1,72 @@
+/* website/templates/style.css */
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    color: #333;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+label {
+    margin-right: 10px;
+}
+
+input {
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#scrapedComments {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    overflow: auto;
+}
+
+
+table {
+    width: auto; /* Set width to auto for dynamic width based on content */
+    border-collapse: collapse;
+    margin-top: 10px;
+    table-layout: auto; /* Set table layout to auto for dynamic width based on content */
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px; /* Increase padding for better spacing */
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+td {
+    border: 1px solid #ddd;
+    padding: 12px; /* Increase padding for better spacing */
+    text-align: left;
+    margin-right: 10px; /* Increase right margin for more space */
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
