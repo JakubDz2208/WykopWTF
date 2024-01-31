@@ -5,3 +5,4 @@ scikit-learn
 datasets
 joblib
 bs4
+pytest

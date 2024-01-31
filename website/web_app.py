@@ -12,9 +12,11 @@ app = Flask(__name__, static_folder='static')
 model = joblib.load('model/model.joblib')
 tfidf_vectorizer = joblib.load('model/tfidf_vectorizer.joblib')
 
+
 @app.route('/')
 def index():
     return render_template('template.html')
+
 
 @app.route('/api/scrape_comments', methods=['POST'])
 def api_scrape_comments():
@@ -26,6 +28,9 @@ def api_scrape_comments():
         scraper = CommentScraper(url, comments_selector=".wrapper")  # Adjust the selector accordingly
         scraped_comments = scraper.scrape_comments(limit=int(limit) if limit else None)
         
+        if scraped_comments.empty:
+            return jsonify({'error': 'No comments available'})
+
         comments_tfidf = tfidf_vectorizer.transform(scraped_comments['Comment'])
 
         predictions = model.predict(comments_tfidf)
@@ -39,6 +44,6 @@ def api_scrape_comments():
     else:
         return jsonify({'error': 'Invalid parameters'})
 
+
 if __name__ == '__main__':
     app.run(debug=True)
-

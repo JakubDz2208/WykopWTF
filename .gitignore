@@ -1,0 +1,40 @@
+# Pliki tymczasowe
+__pycache__/
+
+# Katalogi generowane przez różne narzędzia
+*.pyc
+*.pyo
+*.pyd
+__pycache__
+
+# Pliki środowiska wirtualnego
+venv/
+env/
+
+# Pliki konfiguracyjne
+instance/
+*.pyc
+
+# Katalogi generowane przez Flask
+.mypy_cache/
+.pytest_cache/
+
+# Pliki z logami
+*.log
+
+# Pliki pycodestyle
+.pylintrc
+
+# Pliki środowiska
+.env
+
+# Katalog generowany przez pytest-cov
+htmlcov/
+
+# Pliki konfiguracyjne IDE
+.idea/
+.vscode/
+
+# Pliki systemowe
+.DS_Store
+Thumbs.db
